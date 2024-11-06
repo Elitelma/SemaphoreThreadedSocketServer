@@ -48,46 +48,42 @@ void Server::start() {
 }
 
 //Function to accept incoming connections and cread threads
-void Server::acceptConnections(){
-
+void Server::acceptConnections() {
     int newsocket;
     addr_size = sizeof(serverStorage);
 
-    while (true)
-    {
+    while (true) {
         newsocket = accept(serverSocket, (struct sockaddr*)&serverStorage, &addr_size);
         int choice;
         recv(newsocket, &choice, sizeof(choice), 0);
 
-        if (choice == 1)
-        {
-            //Create read thread
-            if(pthread_create(&readerThreads[readercont++], NULL, reader, NULL) != 0) {
-                std::cerr << "Failed to creadt reader thread " << std::endl;
+        if (choice == 1) {
+            // Create read thread
+            if(pthread_create(&readerThreads[readercont++], NULL, &Server::staticReader, this) != 0) {
+                std::cerr << "Failed to create reader thread " << std::endl;
             }
-    
-        }else if(choice == 2) {
-            if(pthread_create(&writerThreads[writercont++], NULL, writer, NULL) != 0){
-                std::cerr << "Failed to cread a writer thread" << std::endl;
-            }
-        } 
 
-        //Ensure we dont exceed the maximum number of threads
+        } else if(choice == 2) {
+            if(pthread_create(&writerThreads[writercont++], NULL, &Server::staticWriter, this) != 0) {
+                std::cerr << "Failed to create writer thread" << std::endl;
+            }
+        }
+
+        // Ensure we don't exceed the maximum number of threads
         if(readercont >= 50) {
-            for(int i = 0; i < readercont; ++i){
+            for(int i = 0; i < readercont; ++i) {
                 pthread_join(readerThreads[i], NULL);
             }
             readercont = 0;
-        }  
+        }
+
         if(writercont >= 50) {
-            for(int i = 0; i < writercont; ++i){
+            for(int i = 0; i < writercont; ++i) {
                 pthread_join(writerThreads[i], NULL);
             }
             writercont = 0;
-        }  
-
+        }
     }
-    
 }
 
 //Read thread function
@@ -129,15 +125,12 @@ void* Server::writer(void* param){
 }
 
 void* Server::staticReader(void* param) {
-
     Server* server = static_cast<Server*>(param);
     return server->reader(param);
-
 }
 
-void* Server::staticWriter(void* param) {
 
+void* Server::staticWriter(void* param) {
     Server* server = static_cast<Server*>(param);
     return server->writer(param);
-
 }

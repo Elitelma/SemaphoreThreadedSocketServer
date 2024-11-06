@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 
-Client::Client(const std::string& serverIP, int port) : serverIP(serverIP), port(port) {
+Client::Client(const std::string& ip, int port) : serverIP(ip), port(port) {
 
     //Initialize client socket
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -36,7 +36,7 @@ bool Client::connectToServer(){
         return false;
     }
 
-    std::cout << "Connected to the server at " << serverIp << ":" << port << std::endl;
+    std::cout << "\nConnected to the server at " << serverIP << ":" << port << std::endl;
     return true;
 }
 
@@ -45,6 +45,6 @@ void Client::sendChoice(int choice){
     if(send(clientSocket, &choice, sizeof(choice),0) < 0){
         std::cerr << "Error sending data to server. " << std::endl;
     }else {
-        std::cout << "Choice sent to the server: " << (choice == 1 ? "Read" : "Write") << std::endl;
+        std::cout << "\nChoice sent to the server: " << (choice == 1 ? " Read " : " Write ") << std::endl;
     }
 }

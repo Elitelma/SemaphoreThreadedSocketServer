@@ -1,11 +1,10 @@
-#ifndef CLIEN_HPP
+#ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-#include<string>
-#include<netinet/in.h>
+#include <string>
+#include <netinet/in.h>
 
 class Client {
-
 public:
     Client(const std::string& serverIP, int port);
     ~Client();
@@ -15,10 +14,8 @@ public:
 
 private:
     int clientSocket;
-    std::string serverIp;
-    int port;
-    struct sockadd_in serverAddr;
-    
+    std::string serverIP; 
+    struct sockaddr_in serverAddr; 
 };
 
-#endif
+#endif // CLIENT_HPP
