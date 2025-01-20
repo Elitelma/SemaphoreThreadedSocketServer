@@ -36,11 +36,11 @@ int main() {
     const int port = 8080;
     std::vector<std::thread>clientThreads;
 
-    for(int i = 0; i< 3; ++i){
+    for(int i = 0; i< 500; ++i){
         clientThreads.push_back(std::thread(startClient, 1, serverIP, port));
     }
 
-    for(int i = 0; i< 4; ++i){
+    for(int i = 0; i< 500; ++i){
         clientThreads.push_back(std::thread(startClient, 2, serverIP, port));
     }
 

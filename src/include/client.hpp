@@ -15,6 +15,7 @@ public:
 private:
     int clientSocket;
     std::string serverIP; 
+    int port;
     struct sockaddr_in serverAddr; 
 };
 
